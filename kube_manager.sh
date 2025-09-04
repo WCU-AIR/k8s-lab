@@ -32,8 +32,7 @@ systemctl start rke2-server.service
 cp /var/lib/rancher/rke2/server/node-token /opt/keys/
 
 # Setup kubectl
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+sudo ln -sf /var/lib/rancher/rke2/bin/kubectl /usr/local/bin/kubectl
 
 while IFS= read -r line; do
   mkdir -p /users/$line/.kube
