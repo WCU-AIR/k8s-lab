@@ -10,11 +10,7 @@ pc.defineParameter( "n",
 pc.defineParameter( "userid", 
                    "CloudLab user ID to deploy K8s from (should be your CloudLab ID. Defaulted to none", 
                    portal.ParameterType.STRING, 'none' )
-pc.defineParameter( "corecount", 
-                   "Number of cores in each node.  NB: Make certain your requested cluster can supply this quantity.", 
-                   portal.ParameterType.INTEGER, 2 )
-pc.defineParameter( "ramsize", "MB of RAM in each node.  NB: Make certain your requested cluster can supply this quantity.", 
-                   portal.ParameterType.INTEGER, 2048 )
+
 params = pc.bindParameters()
 
 request = pc.makeRequestRSpec()
@@ -37,13 +33,12 @@ link = request.LAN("lan")
 num_nodes = params.n
 for i in range(num_nodes):
   if i == 0:
-    node = request.XenVM("head")
+    node = request.RawPC("head")
     bs_landing = node.Blockstore("bs_image", "/image")
     bs_landing.size = "500GB"
   else:
-    node = request.XenVM("worker-" + str(i))
-  node.cores = params.corecount
-  node.ram = params.ramsize
+    node = request.RawPC("worker-" + str(i))
+
   bs_landing = node.Blockstore("bs_" + str(i), "/image")
   bs_landing.size = "500GB"
   node.routable_control_ip = "true" 
